@@ -1,0 +1,19 @@
+.layout{
+    width: 100%;
+    min-height: 100vh;
+
+    &__backBtn{
+        display: flex;
+        justify-content: flex-start;
+
+        & > button{
+            display: flex;
+            align-items: center;
+            font-size: 25px;
+
+            & > img {
+                margin-right: 25px;
+            }
+        }
+    }
+}
