@@ -34,3 +34,17 @@
         color: rgba(24, 160, 251, 1);
     }
 }
+
+.select{
+    padding: 14px 0;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #BBBBBB;
+    margin-bottom: 26px;
+    text-transform: capitalize;
+
+    & > option{
+        text-transform: capitalize;
+    }
+}
