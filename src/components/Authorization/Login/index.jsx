@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { HOST } from '../../../constants';
 
 import Form from '../Form';
 import Input from '../Input';
@@ -8,10 +9,32 @@ import style from './Login.module.scss'
 
 const Login = () => {
     const formRef = useRef()
+    const navigate = useNavigate()
+    const token = JSON.parse(localStorage.getItem('token'))
 
     const sendForm = (e) => {
         e.preventDefault()
+        
+        const form = formRef.current
+        const body = JSON.stringify({
+            contact: form.contact.value,
+            password: form.password.value,
+        })
+        const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+
+        fetch(`${HOST}/login`, options)
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === 201) {
+                localStorage.setItem('token', JSON.stringify(res.token))
+                navigate('/science')
+            } else {
+                alert(res.error || res.message)
+            }
+        })
     }
+    
+    if(token) return <Navigate to={'/science'} />
 
     return (
         <Form onSubmit={sendForm} formRef={formRef}>

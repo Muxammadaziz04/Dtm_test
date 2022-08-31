@@ -2,15 +2,12 @@ import React from 'react';
 
 import style from './TableItem.module.scss'
 
-const TableItem = ({info}) => {
-
-    if(!info) return <></>
-
+const TableItem = ({name, count, ball}) => {
     return (
         <div className={style.table}>
-            <span>{info?.name}</span>
-            <span>{info?.min}</span>
-            <span>{info?.max}</span>
+            <span>{name}</span>
+            <span>{count}</span>
+            <span>{ball}</span>
         </div>
     );
 }

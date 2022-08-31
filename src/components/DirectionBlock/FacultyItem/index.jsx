@@ -4,15 +4,18 @@ import closeIcon from '../../../assets/close.svg'
 
 import style from './FacultyItem.module.scss'
 
-const FacultyItem = ({ name }) => {
+const FacultyItem = ({ faculty, func, count }) => {
 
-    if(!name) return <></>
+    if (!faculty) return <></>
 
     return (
-        <div className={style.item}>
-            {name}
-            <img src={closeIcon} alt="close icon" />
-        </div>
+        <span style={{ display: 'flex', alignItems: 'center' }}>
+            {count}
+            <div className={style.item} onClick={() => func(faculty.faculty_id)}>
+                {faculty.faculty_name}
+                <img src={closeIcon} alt="close icon" />
+            </div>
+        </span>
     );
 }
 

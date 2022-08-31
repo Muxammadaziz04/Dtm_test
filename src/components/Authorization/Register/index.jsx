@@ -1,47 +1,65 @@
-import React, { useRef } from 'react';
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 import Form from '../Form';
 import Input from '../Input';
 import Radio from '../Radio';
 import Select from '../../Select';
+import { HOST } from '../../../constants';
 
 import style from './Register.module.scss'
 
 const Register = () => {
     const formRef = useRef()
-
-    const country = [
-        'andijon viloyati', 
-        'buxoro viloyati', 
-        'fargʻona viloyati', 
-        'jizzax viloyati', 
-        'xorazm viloyati', 
-        'namangan viloyati', 
-        'navoi viloyati', 
-        'qashqadaryo viloyati', 
-        'qoraqalpog\'iston respublikasi', 
-        'samarqand viloyati', 
-        'sirdaryo viloyati', 
-        'surxondaryo viloyati', 
-        'toshkent viloyati',
-        'toshkent shaxri'
-    ]
+    const navigate = useNavigate()
+    const [regions, setRegions] = useState([])
+    const token = JSON.parse(localStorage.getItem('token'))
 
     const sendForm = (e) => {
         e.preventDefault()
+
+        const form = formRef.current
+        const body = JSON.stringify({
+            fullname: form.fullname.value,
+            contact: form.contact.value,
+            region_id: form.region.value,
+            password: form.password.value,
+            gender: form.gender.value
+        })
+        const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+
+        fetch(`${HOST}/register`, options)
+        .then(res => res.json())
+        .then(res => {
+            if(res.status === 201) {
+                localStorage.setItem('token', JSON.stringify(res.token))
+                navigate('/science')
+            } else {
+                alert(res.error || res.message)
+            }
+        })
     }
+
+    useEffect(() => {
+        fetch(`${HOST}/regions`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200) setRegions(res.data)
+                else alert(res.message || res.error)
+            })
+    }, [])
+
+    if (token) return <Navigate to={'/science'} />
 
     return (
         <Form onSubmit={sendForm} formRef={formRef}>
             <h1 className={style.title}>Royhatdan otish</h1>
-            <Input name='fullName' type='text' placeholder='Full name' required={true}/>
-            <Input name='contact' type='text' placeholder='Email or phone' required={true}/>
-            <Input name='username' type='text' placeholder='Username' />
-            <Select arr={country} name='country' className={style.select}/>
-            <Input name='password' type='password' placeholder='Password' required={true}/>
-            <Radio name="gender" value='erkak' text='Erkak' chekced={true}/>
-            <Radio name="gender" value='ayol' text='Ayol'/>
+            <Input name='fullname' type='text' placeholder='Full name' required={true} />
+            <Input name='contact' type='text' placeholder='Email or phone' required={true} />
+            <Select name='region' arr={regions} id='region_id' value='region_id' text='region_name' className={style.select} />
+            <Input name='password' type='password' placeholder='Password' required={true} />
+            <Radio name="gender" value='male' text='Erkak' chekced={true} />
+            <Radio name="gender" value='female' text='Ayol' />
             <button type='submit' className={style.btn}>Royhatdan otish</button>
             <Link to='/login' className={style.link}>Hisobingiz bormi? Kirish</Link>
         </Form>
