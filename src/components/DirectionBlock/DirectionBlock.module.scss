@@ -1,5 +1,7 @@
 .directionBlock{
     width: 100%;
+    display: flex;
+    flex-direction: column;
 
     &__title{
         width: 100%;
@@ -93,6 +95,23 @@
 
     &__facultyBlokc{
         gap: 15px;
+    }
+
+    &__btn{
+        background: inherit;
+        border: 1px solid #AAAAAA;
+        border-radius: 20px;
+        padding: 14px 70px;
+        font-size: 18px;
+        line-height: 27px;
+        align-self: flex-end;
+        margin-bottom: 50px;
+        transition: all 0.3s;
+
+        &:hover{
+            background: #18A0FB;
+            color: white;
+        }
     }
 }
 

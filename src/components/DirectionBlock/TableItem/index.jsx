@@ -2,7 +2,7 @@ import React from 'react';
 
 import style from './TableItem.module.scss'
 
-const TableItem = ({name, count, ball}) => {
+const TableItem = ({ name, count, ball }) => {
     return (
         <div className={style.table}>
             <span>{name}</span>

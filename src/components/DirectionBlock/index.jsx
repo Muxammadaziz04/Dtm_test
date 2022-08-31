@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux/es/exports';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+import { setFacultiesAction } from '../../redux/actions/facultiesAction';
 import FacultyItem from './FacultyItem';
 import TableItem from './TableItem';
 import CustomSelect from './CustomSelect';
+import { HOST } from '../../constants';
 
 import style from './DirectionBlock.module.scss'
-import { HOST } from '../../constants';
 
 const DirectionBlock = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const [universities, setUniversities] = useState([])
     const [faculties, setFaculties] = useState([])
     const [facultyInfo, setFacultyInfo] = useState([])
@@ -28,22 +31,27 @@ const DirectionBlock = () => {
         setFaculties(state => state.filter(faculty => faculty.faculty_id !== faculty_id))
     }
 
+    const sendInfo = () => {
+        if (!faculties.length) return alert('kamida 1ta fakultet tanlashingiz kerak')
+        dispatch(setFacultiesAction(faculties))
+        navigate('/tests')
+    }
+
     const getInfo = (faculty_id) => {
-        fetch(`${HOST}/faculties/${faculty_id}`)
-        .then(res => res.json())
-        .then(res => {
-            if(res.status === 200) {
-                setFacultyInfo(res.data)
-                console.log(res.data);
-            } else {
-                alert(res.error || res.message)
-            }
-        })
+        fetch(`${HOST}/faculties/${faculty_id}`, { headers: { token } })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200) {
+                    setFacultyInfo(res.data)
+                } else {
+                    alert(res.error || res.message)
+                }
+            })
     }
 
     useEffect(() => {
         if (!first_subject || !second_subject) return navigate('/science')
-        fetch(`${HOST}/universities?first_subject=${first_subject}&second_subject=${second_subject}`)
+        fetch(`${HOST}/universities?first_subject=${first_subject}&second_subject=${second_subject}`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
                 if (res.status === 200) {
@@ -52,7 +60,7 @@ const DirectionBlock = () => {
                     alert(res.error || res.message)
                 }
             })
-    }, [first_subject, second_subject, navigate])
+    }, [first_subject, second_subject, navigate, token])
 
     if (!token) return <Navigate to='/login' />
 
@@ -71,11 +79,11 @@ const DirectionBlock = () => {
                     Yonalish tanlash
                     {
                         universities.length > 0 && universities.map(university => (
-                            <CustomSelect 
-                                key={university.university_id} 
-                                name={university.university_name} 
-                                array={university.faculties} 
-                                func={addFaculty} 
+                            <CustomSelect
+                                key={university.university_id}
+                                name={university.university_name}
+                                array={university.faculties}
+                                func={addFaculty}
                                 onHover={getInfo}
                             />
                         ))
@@ -97,6 +105,7 @@ const DirectionBlock = () => {
                     </div>
                 </span>
             </div>
+            <button onClick={sendInfo} className={style.directionBlock__btn}>Next</button>
         </div>
     );
 }

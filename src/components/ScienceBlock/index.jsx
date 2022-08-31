@@ -17,9 +17,9 @@ const ScienceBlock = () => {
     const token = JSON.parse(localStorage.getItem('token'))
 
     const getSecondSubject = async () => {
-        let res = await fetch(`${HOST}/secondsubject/${formRef.current.firstSubject.value}`)
+        let res = await fetch(`${HOST}/secondsubject/${formRef.current.firstSubject.value}`, { headers: { token } })
         res = await res.json()
-        if(res.status === 200) {
+        if (res.status === 200) {
             setSecondSubject(res.data)
         } else {
             alert(res.error || res.message)
@@ -32,14 +32,14 @@ const ScienceBlock = () => {
             first_subject: formRef.current.firstSubject.value,
             second_subject: formRef.current.secondSubject.value
         }
-        if(!subjects.first_subject || !subjects.second_subject) return alert('1chi va 2chi fanlarni tanlang')
+        if (!subjects.first_subject || !subjects.second_subject) return alert('1chi va 2chi fanlarni tanlang')
         dispatch(setSubjects(subjects))
         localStorage.setItem('subjects', JSON.stringify(subjects))
         navigate('/direction')
     }
 
     useEffect(() => {
-        fetch(`${HOST}/firstsubject`)
+        fetch(`${HOST}/firstsubject`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
                 if (res.status === 200) {
@@ -48,7 +48,7 @@ const ScienceBlock = () => {
                     alert(res.error || res.message)
                 }
             })
-    }, []);
+    }, [token]);
 
     if (!token) return <Navigate to='/login' />
 

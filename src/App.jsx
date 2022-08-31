@@ -28,7 +28,7 @@ function App() {
             <Route path="direction" element={<DirectionBlock />} />
           </Route>
           <Route path="/tests" element={<Tests />} />
-          <Route path="/score" element={<Score />} />
+          <Route path="/score/:result_id" element={<Score />} />
           <Route path="/students" element={<Students />} />
           <Route path="/results" element={<Results />} />
         </Routes>

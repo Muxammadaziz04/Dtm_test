@@ -18,10 +18,10 @@ const CustomSelect = ({ func, array, name, onHover }) => {
             <div className={isOpen ? style.openItems : style.closeItems}>
                 {
                     array.length > 0 && array.map(faculty => (
-                        <div 
-                            onClick={() => func(faculty)} 
+                        <div
+                            onClick={() => func(faculty)}
                             onMouseOver={() => onHover(faculty.faculty_id)}
-                            className={style.item} 
+                            className={style.item}
                             key={faculty.faculty_id}
                         >{faculty.faculty_name}</div>
                     ))

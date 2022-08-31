@@ -3,16 +3,15 @@ import Radio from './Radio';
 
 import style from './TestItem.module.scss'
 
-const TestItem = () => {
+const TestItem = ({ test, count }) => {
     return (
         <div className={style.testItem}>
-            <h3 className={style.testItem__question}>#3 Choose the answer which correctly completes the sentence.</h3>
-            <p className={style.testItem__desc}>When I got home I found an envelope on the table. In it was a … card from Aunt Alice for passing my French exam.</p>
+            <h3 className={style.testItem__question}>#{count} {test.question}</h3>
             <div className={style.testItem__variants}>
-                <Radio name={1} variant="congratulation’s" />
-                <Radio name={1} variant="congratulation’s" />
-                <Radio name={1} variant="congratulation’s" />
-                <Radio name={1} variant="congratulation’s" />
+                <Radio name={test.question_id} variant={test.question_variants['1']} value={1} correct_value={test.question_variants.correct} />
+                <Radio name={test.question_id} variant={test.question_variants['2']} value={2} correct_value={test.question_variants.correct} />
+                <Radio name={test.question_id} variant={test.question_variants['3']} value={3} correct_value={test.question_variants.correct} />
+                <Radio name={test.question_id} variant={test.question_variants['4']} value={4} correct_value={test.question_variants.correct} />
             </div>
         </div>
     );

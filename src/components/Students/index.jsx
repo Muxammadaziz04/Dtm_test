@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+
+import { HOST } from '../../constants';
 import StudentItem from './StudentItem';
 
 import style from './Students.module.scss'
 
 const Students = () => {
+    const [results, setResults] = useState([])
+    const token = JSON.parse(localStorage.getItem('token'))
+
+    useEffect(() => {
+        fetch(`${HOST}/highest/results`, { headers: { token } })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200) {
+                    setResults(res.data)
+                } else {
+                    alert(res.error || res.message)
+                }
+            })
+    }, [token])
+
+    if (!token) return <Navigate to='/login' />
+
     return (
         <div className='container'>
             <h2 className={style.students__title}>Songi imtihon g’olibi</h2>
@@ -19,10 +39,11 @@ const Students = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <StudentItem />
-                    <StudentItem />
-                    <StudentItem />
-                    <StudentItem />
+                    {
+                        results.length > 0 && results.map((result, index) => (
+                            <StudentItem key={result.result_id} result={result} count={index + 1} />
+                        ))
+                    }
                 </tbody>
             </table>
         </div>

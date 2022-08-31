@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Select = ({name, onChange, arr, className, id, value, text}) => {
-    
-    if(!arr) return <></>
+const Select = ({ name, onChange, arr, className, id, value, text }) => {
+
+    if (!arr) return <></>
 
     return (
         <select name={name} onChange={onChange} className={className}>
