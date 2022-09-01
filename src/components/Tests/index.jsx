@@ -69,7 +69,7 @@ const Tests = () => {
                     alert(res.error || res.message)
                 }
             })
-    }, [first_subject, second_subject])
+    }, [first_subject, second_subject, token])
 
     if (!token) return <Navigate to='/login' />
     if (!faculties.length) return <Navigate to='/science' />
