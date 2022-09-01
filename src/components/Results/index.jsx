@@ -9,15 +9,19 @@ import Logout from '../../assets/logout.svg'
 
 import style from './Results.module.scss'
 import { HOST } from '../../constants';
+import Loader from '../Loader';
 
 const Results = () => {
     const [results, setResults] = useState([])
+    const [loading, setLoading] = useState(false)
     const token = JSON.parse(localStorage.getItem('token'))
 
     useEffect(() => {
+        setLoading(true)
         fetch(`${HOST}/results`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setResults(res.data)
                 } else {
@@ -30,6 +34,7 @@ const Results = () => {
 
     return (
         <div className={style.results + " container"}>
+            { loading ? <Loader /> : <></> }
             <div className={style.results__nav}>
                 <Link to='/science' className={style.results__nav__item}>
                     <img src={bookIcon} alt="book icon" />

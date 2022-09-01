@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux/es/exports';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+import Loader from '../Loader';
 import Select from '../Select'
 import { setSubjects } from '../../redux/actions/subjectsAction';
 import { HOST } from '../../constants';
@@ -12,11 +13,13 @@ const ScienceBlock = () => {
     const formRef = useRef()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [firstSubjects, setFirstSubjects] = useState([])
     const [secondSubjects, setSecondSubject] = useState([])
     const token = JSON.parse(localStorage.getItem('token'))
 
     const getSecondSubject = async () => {
+        setLoading(true)
         let res = await fetch(`${HOST}/secondsubject/${formRef.current.firstSubject.value}`, { headers: { token } })
         res = await res.json()
         if (res.status === 200) {
@@ -24,6 +27,7 @@ const ScienceBlock = () => {
         } else {
             alert(res.error || res.message)
         }
+        setLoading(false)
     }
 
     const sendInfo = (e) => {
@@ -39,9 +43,11 @@ const ScienceBlock = () => {
     }
 
     useEffect(() => {
+        setLoading(true)
         fetch(`${HOST}/firstsubject`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setFirstSubjects(res.data)
                 } else {
@@ -54,6 +60,7 @@ const ScienceBlock = () => {
 
     return (
         <form onSubmit={sendInfo} ref={formRef} className={style.scienceBlock}>
+            {loading ? <Loader /> : <></>}
             <h1 className={style.scienceBlock__title}>Assosiy Imtihonga hush kelibsiz</h1>
             <div className={style.scienceBlock__timeline}>
                 <div className={style.active}>1</div>

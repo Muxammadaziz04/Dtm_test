@@ -5,16 +5,20 @@ import Range from './Range';
 import { HOST } from '../../constants';
 
 import style from './Score.module.scss'
+import Loader from '../Loader';
 
 const Score = () => {
     const { result_id } = useParams()
     const [result, setResult] = useState([])
+    const [loading, setLoading] = useState(false)
     const token = JSON.parse(localStorage.getItem('token'))
 
     useEffect(() => {
+        setLoading(true)
         fetch(`${HOST}/result/${result_id}`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setResult(res.data)
                 } else {
@@ -27,6 +31,7 @@ const Score = () => {
 
     return (
         <div className='container'>
+            { loading ? <Loader /> : <></> }
             <h1 className={style.results__title}>Assosiy</h1>
             <div className={style.results__ranges}>
                 <Range color={'#18A0FB'} count_of_tests={result[0]?.first_tests_count} correct={result[0]?.first_subject} name={result[0]?.first_subject_name} />

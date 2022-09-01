@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux/es/exports';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { HOST } from '../../constants';
+import Loader from '../Loader';
 
 import TestItem from './TestItem';
 
@@ -10,6 +11,7 @@ import style from './Tests.module.scss'
 const Tests = () => {
     const navigate = useNavigate()
     const [tests, setTests] = useState([])
+    const [loading, setLoading] = useState(false)
     const [{ first_subject, second_subject }, faculties] = useSelector(state => [state.subjectsReducer, state.facultiesReducer])
     const token = JSON.parse(localStorage.getItem('token'))
 
@@ -56,9 +58,11 @@ const Tests = () => {
     }
 
     useEffect(() => {
+        setLoading(true)
         fetch(`${HOST}/tests?first_subject=${first_subject}&second_subject=${second_subject}`)
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setTests(res.data)
                 } else {
@@ -72,6 +76,7 @@ const Tests = () => {
 
     return (
         <div className="container">
+            { loading ? <Loader /> : <></> }
             <div className={style.testBlock}>
                 <form className={style.testBlock__form} name="test" onSubmit={sendResults}>
                     {

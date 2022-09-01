@@ -2,18 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { HOST } from '../../constants';
+import Loader from '../Loader';
 import StudentItem from './StudentItem';
 
 import style from './Students.module.scss'
 
 const Students = () => {
     const [results, setResults] = useState([])
+    const [loading, setLoading] = useState(false)
     const token = JSON.parse(localStorage.getItem('token'))
 
     useEffect(() => {
+        setLoading(true)
         fetch(`${HOST}/highest/results`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setResults(res.data)
                 } else {
@@ -26,6 +30,7 @@ const Students = () => {
 
     return (
         <div className='container'>
+            { loading ? <Loader /> : <></> }
             <h2 className={style.students__title}>Songi imtihon g’olibi</h2>
             <table className={style.students__table}>
                 <thead>

@@ -7,6 +7,7 @@ import { setFacultiesAction } from '../../redux/actions/facultiesAction';
 import FacultyItem from './FacultyItem';
 import TableItem from './TableItem';
 import CustomSelect from './CustomSelect';
+import Loader from '../Loader';
 import { HOST } from '../../constants';
 
 import style from './DirectionBlock.module.scss'
@@ -14,9 +15,10 @@ import style from './DirectionBlock.module.scss'
 const DirectionBlock = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [universities, setUniversities] = useState([])
+    const [loading, setLoading] = useState(false)
     const [faculties, setFaculties] = useState([])
     const [facultyInfo, setFacultyInfo] = useState([])
+    const [universities, setUniversities] = useState([])
     const { first_subject, second_subject } = useSelector(state => state.subjectsReducer)
     const token = JSON.parse(localStorage.getItem('token'))
 
@@ -51,9 +53,11 @@ const DirectionBlock = () => {
 
     useEffect(() => {
         if (!first_subject || !second_subject) return navigate('/science')
+        setLoading(true)
         fetch(`${HOST}/universities?first_subject=${first_subject}&second_subject=${second_subject}`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
+                setLoading(false)
                 if (res.status === 200) {
                     setUniversities(res.data)
                 } else {
@@ -66,6 +70,7 @@ const DirectionBlock = () => {
 
     return (
         <div className={style.directionBlock}>
+            { loading ? <Loader /> : <></> }
             <h1 className={style.directionBlock__title}>Assosiy Imtihonga hush kelibsiz</h1>
             <div className={style.directionBlock__timeline}>
                 <div className={style.active}>1</div>

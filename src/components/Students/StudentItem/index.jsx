@@ -14,7 +14,7 @@ const StudentItem = ({ result, count }) => {
         <tr className={style.row}>
             <td>{count}</td>
             <td>{result.fullname}</td>
-            <td>{result.faculty_name}</td>
+            <td>{result.faculty_name || 'Tavsiya etilmadi'}</td>
             <td>{day}.{month}.{year}</td>
             <td>{result.score_ball}</td>
             <td>{result.time} min</td>

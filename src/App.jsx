@@ -13,6 +13,7 @@ import Students from "./components/Students";
 import Results from "./components/Results";
 import Redirect from "./components/Redirect";
 import { store } from './redux/store'
+import NavbarLayout from "./components/Layout/Navbar";
 
 
 function App() {
@@ -20,17 +21,19 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route path="" element={<Redirect />} />
-            <Route path="register" element={<Register />} />
-            <Route path="login" element={<Login />} />
-            <Route path="science" element={<ScienceBlock />} />
-            <Route path="direction" element={<DirectionBlock />} />
+          <Route path="/" element={<NavbarLayout />}>
+            <Route path="" element={<Layout />}>
+              <Route path="" element={<Redirect />} />
+              <Route path="register" element={<Register />} />
+              <Route path="login" element={<Login />} />
+              <Route path="science" element={<ScienceBlock />} />
+              <Route path="direction" element={<DirectionBlock />} />
+            </Route>
+            <Route path="tests" element={<Tests />} />
+            <Route path="score/:result_id" element={<Score />} />
+            <Route path="students" element={<Students />} />
+            <Route path="results" element={<Results />} />
           </Route>
-          <Route path="/tests" element={<Tests />} />
-          <Route path="/score/:result_id" element={<Score />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/results" element={<Results />} />
         </Routes>
       </BrowserRouter>
     </Provider>
