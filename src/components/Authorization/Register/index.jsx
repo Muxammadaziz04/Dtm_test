@@ -29,19 +29,19 @@ const Register = () => {
         const options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
 
         fetch(`${HOST}/register`, options)
-        .then(res => res.json())
-        .then(res => {
-            if(res.status === 201) {
-                localStorage.setItem('token', JSON.stringify(res.token))
-                navigate('/science')
-            } else {
-                alert(res.error || res.message)
-            }
-        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.status === 201) {
+                    localStorage.setItem('token', JSON.stringify(res.token))
+                    navigate('/science')
+                } else {
+                    alert(res.error || res.message)
+                }
+            })
     }
 
     useEffect(() => {
-        fetch(`${HOST}/regions`)
+        fetch(`${HOST}/regions`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
                 if (res.status === 200) setRegions(res.data)
