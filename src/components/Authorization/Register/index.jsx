@@ -47,7 +47,7 @@ const Register = () => {
                 if (res.status === 200) setRegions(res.data)
                 else alert(res.message || res.error)
             })
-    }, [])
+    }, [token])
 
     if (token) return <Navigate to={'/science'} />
 
