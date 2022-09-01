@@ -59,7 +59,7 @@ const Tests = () => {
 
     useEffect(() => {
         setLoading(true)
-        fetch(`${HOST}/tests?first_subject=${first_subject}&second_subject=${second_subject}`)
+        fetch(`${HOST}/tests?first_subject=${first_subject}&second_subject=${second_subject}`, { headers: { token } })
             .then(res => res.json())
             .then(res => {
                 setLoading(false)
@@ -76,7 +76,7 @@ const Tests = () => {
 
     return (
         <div className="container">
-            { loading ? <Loader /> : <></> }
+            {loading ? <Loader /> : <></>}
             <div className={style.testBlock}>
                 <form className={style.testBlock__form} name="test" onSubmit={sendResults}>
                     {
